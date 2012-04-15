@@ -225,4 +225,8 @@ function load () {
     $('#username').val(user);
 
     start();
+
+    window.onhashchange = function () {
+        load();
+    }
 }
