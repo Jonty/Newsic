@@ -221,10 +221,12 @@ function hideUserInput () {
 
 function load () {
     hash = window.location.hash;
-    user = hash.substring(1);
-    $('#username').val(user);
+    new_user = hash.substring(1);
 
-    start();
+    if (user != new_user) {
+        $('#username').val(new_user);
+        start();
+    }
 
     window.onhashchange = function () {
         load();
