@@ -49,7 +49,10 @@ function renderChart(discoverPlays) {
 
         yAxis: {
             title: {
-                text: 'Plays of newly discovered artists'
+                text: 'Plays of newly discovered artists',
+                style: {
+                    color: 'black'
+                }
             },
             min: 0
         },
