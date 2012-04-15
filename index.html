@@ -1,0 +1,93 @@
+<html>
+<head>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script type="text/javascript" src="newsic.js"></script>
+
+    <title>Newsic</title>
+
+    <style type="text/css">
+        body {
+            font-family: Helvetica, Bitstream Vera Sans, sans-serif;
+            color: #000000;
+        }
+        h1 small {
+            font-size: 0.5em;
+            font-weight: normal;
+        }
+        iframe {
+            border: 0px solid #ffffff;
+        }
+        .content {
+            text-align: left;
+            margin-left: 20%;
+            margin-top: 3%;
+        }
+        .heading {
+            font-size: 3em;
+            font-weight: bold;
+        }
+        .item {
+            margin-left: 3%;
+        }
+        .mainlink {
+            font-size: 2em;
+        }
+        .comment {
+            color: gray;
+            font-size: 1em;
+            margin-left: 5%;
+        }
+        A:link {
+            text-decoration: none;
+            color: #008000;
+        }
+        A:visited {
+            text-decoration: none;
+            color: #008000;
+        }
+        A:active {
+            text-decoration: none;
+            color: #008000;
+        }
+        A:hover {
+            text-decoration: underline;
+            color: #008000;
+        }
+    </style>
+
+</head>
+<body onload="load()">
+    <div>
+        <span>&nbsp;</span>
+        <a href="javascript:showUserInput()" id="switchUser" style="display: none;">
+            Switch User
+            <small>
+                (currently looking at <strong><span id="usertext"></span></strong>)
+            </small>
+        </a>
+    </div>
+    <div class="content">
+        <h1 style="color: grey;">Newsic <small><span id='dots'>...</span><span id='userheading'></span>last.fm musical discoveries over time</small></h1>
+
+        <div id="status" class="mainlink"></div>
+        <br>
+
+        <div id="userInput">
+            <form onsubmit="return start()">
+                <strong>Last.fm user to show:</strong> <input id="username" type="text">
+                <input type="submit" value="Activate Graphing!">
+            </form>
+        </div>
+        <div id="note">
+            <small style="line-height: 10em">
+                Made by <a href="http://jonty.co.uk">jonty</a>. Code on <a href="http://github.com/jonty/newsic">github</a>.
+            </small>
+        </div>
+        <script src="http://code.highcharts.com/stock/highstock.js"></script>
+        <script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
+    </div>
+    <center>
+        <div id="container" style="height: 500px; min-width: 500px; display: hidden;"></div>
+    </center>
+</body>
+</html>
