@@ -6,14 +6,21 @@ var ranges = [];
 var rangeDataFetched = 0;
 var rangeData = {};
 var discoverDate = {};
-var discoverPercent = {};
+var discoverPlays = {};
 
-function renderChart(discoverPercent) {
+function renderChart(discoverPlays) {
     data = []
-    $.each(discoverPercent, function(range, percent) {
-        data.push([range*1000, percent]);
-    });
+    $.each(ranges, function(i, chartRanges) {
+        range = chartRanges['to'];
+        amount = discoverPlays[range]
 
+        if (amount == undefined) {
+            amount = 0;
+        }
+
+        data.push([range*1000, amount]);
+    });
+   
     console.log('Rendering chart');
     showGraph();
 
@@ -90,13 +97,13 @@ function processDiscoveries(rangeData) {
             if (discovered.length > 0) {
                 discoverDate[range] = discovered;
             }
-
-            discoverPercent[range] = newplays;
         }
+        
+        discoverPlays[range] = newplays;
 
         if (range == ranges.slice(-1)[0].to) {
             console.log('Finished processing discoveries')
-            renderChart(discoverPercent);
+            renderChart(discoverPlays);
         }
 
     });
@@ -173,7 +180,7 @@ function start() {
     rangeDataFetched = 0;
     rangeData = {};
     discoverDate = {};
-    discoverPercent = {};
+    discoverPlays = {};
     
     hideUserInput();
     getChartRanges();
