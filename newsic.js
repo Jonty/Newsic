@@ -10,8 +10,8 @@ var discoverPlays = {};
 
 function renderChart(discoverPlays) {
     data = []
-    $.each(ranges, function(i, chartRanges) {
-        range = chartRanges['to'];
+    $.each(ranges, function(i, chartRange) {
+        range = chartRange['to'];
         amount = discoverPlays[range]
 
         if (amount == undefined) {
@@ -125,33 +125,55 @@ function updateFetchedCount(ranges, rangeData) {
     }
 }
 
+function fetchRange (chartRange) {
+    $.ajax({
+        url: 'http://ws.audioscrobbler.com/2.0/?method=user.getweeklyartistchart&user=' + 
+             user + '&api_key=' + lastfmApiKey + '&format=json&from=' + chartRange['from'] + 
+             '&to=' + chartRange['to'] + '&length=1000&callback=?',
+        
+        dataType: 'json',
+        
+        success: function (data) {
+            if (data.weeklyartistchart == undefined) {
+                chart = [];
+            } else { 
+                chart = data.weeklyartistchart.artist;
+            }
+
+            rangeData[chartRange['to']] = chart
+            rangeDataFetched++;
+            updateFetchedCount(ranges, rangeData);
+        },
+        
+        error: function(data, textStatus, jqXHR) {
+            console.log('Error fetching chart, retrying in 5s...');
+            
+            setTimeout(function() {
+                console.log('Retrying chart fetch...');
+                fetchRange(chartRange);
+            }, 5*1000)
+        }
+    });
+}
+
 function fetchRanges (ranges) {
     showStatus();
     
-    $.each(ranges, function(i, chartRanges) {
-        $.getJSON('http://ws.audioscrobbler.com/2.0/?method=user.getweeklyartistchart&user=' + 
-                user + '&api_key=' + lastfmApiKey + '&format=json&from=' + chartRanges['from'] + 
-                '&to=' + chartRanges['to'] + '&length=1000&callback=?',
-
-            function (data) {
-                rangeData[chartRanges['to']] = data.weeklyartistchart.artist;
-                rangeDataFetched++;
-                updateFetchedCount(ranges, rangeData);
-            }
-
-        ).error(function() {
-            alert('Drat, something went wrong! Refresh the page to try again.');
-        });
+    $.each(ranges, function(i, chartRange) {
+        fetchRange(chartRange);
     });
 }
 
 function getChartRanges () {
     $('#status').text('Fetching charts...');
     
-    $.getJSON('http://ws.audioscrobbler.com/2.0/?method=user.getweeklychartlist&user=' + 
-            user + '&api_key=' + lastfmApiKey + '&format=json&callback=?',
-
-        function (data) {
+    $.ajax({
+        url: 'http://ws.audioscrobbler.com/2.0/?method=user.getweeklychartlist&user=' + 
+             user + '&api_key=' + lastfmApiKey + '&format=json&callback=?',
+        
+        dataType: 'json',
+        
+        success: function (data) {
             if (data.weeklychartlist == undefined) {
                 $('#status').text(user + ' is not a last.fm user :\'(');
                 return;
@@ -159,10 +181,16 @@ function getChartRanges () {
 
             ranges = data.weeklychartlist.chart;
             fetchRanges(ranges);
-        }
+        },
 
-    ).error(function() {
-        alert('Drat, something went wrong! Refresh the page to try again.');
+        error: function(data, textStatus, jqXHR) {
+            console.log('Error fetching chart ranges, retrying in 5s...');
+            
+            setTimeout(function() {
+                console.log('Retrying chart ranges fetch...');
+                getChartRanges();
+            }, 5*1000)
+        }
     });
 }
 
