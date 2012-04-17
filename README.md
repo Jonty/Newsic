@@ -11,7 +11,7 @@ assuming you actually discover some.
 Notes
 -----
 
-* This is completely untested in anything other than chrome.
+* This is completely untested in anything other than the latest Chrome/FF/Safari.
 * I am a horrid javascript programmer.
 
 Known Problems
