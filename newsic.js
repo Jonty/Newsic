@@ -132,6 +132,7 @@ function fetchRange (chartRange) {
              '&to=' + chartRange['to'] + '&length=1000&callback=?',
         
         dataType: 'json',
+        timeout : 10000,
         
         success: function (data) {
             if (data.weeklyartistchart == undefined) {
@@ -172,6 +173,7 @@ function getChartRanges () {
              user + '&api_key=' + lastfmApiKey + '&format=json&callback=?',
         
         dataType: 'json',
+        timeout : 10000,
         
         success: function (data) {
             if (data.weeklychartlist == undefined) {
